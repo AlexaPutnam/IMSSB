@@ -1,0 +1,7 @@
+
+~ For changing from (t) - (t+1) to (t-1) - (t)
+lib_bilinear_interpolation_ext.py --> bilinear_observation_matrix
+lib_filter_ext.py --> observables
+
+~ For changing the collinear time gap (only for SWOT 1-day repeat)
+lib_direct2difference_ext.py --> dir2dif

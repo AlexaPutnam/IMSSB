@@ -1,0 +1,67 @@
+The following instructions are for using the SSB modeling software developed by
+Alexa Putnam Shilleh from the University of Colorado Boulder. 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Step-1: Pull data from product, filter the content, and stack the data by-cycle.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--> Open "run_product2data_ext.py" and define:
+        MISSIONNAME: input string corresponding to mission name
+            options: 
+                'tx' for Topex/Poseidon
+                'j1' or "j2" or "j3" for Jason missions 1-3
+                's6A' for Sentinel-6 Michael Freilich
+                
+        cyc: an array containing the numbers for each cycle that will be processed
+            i.e. cyc = np.arange(48,101)
+            (Bad cycles will be removed. This can be check in lib_dict_ext.py/bad_cycles)
+            
+        VERSION: input integer to define data format version
+            options:
+                0 for Topex GDRF
+                1 for Jason 1-3 GDRD
+                3 for Jason-3 GDRF and Sentinel-6 MF
+                4 for Sentinel-3
+                
+        ALTINTERP: input string that defines whether to interpolate new orbit solution or not. 
+            options:
+                'full': pull external orbit files, interpolate and add new orbit variable to 
+                    altimetry files.
+                'part': external files have already been pulled. Just interpolate and 
+                    add new orbit variable to altimetry files.
+                'none': do not include new orbit solution
+            ** additional orbit solutions can be added in lib_dict_ext.py/orbit_paths
+        SOURCE: input string corresponding to altimeter data source
+            options:
+                'jpl' for data received from JPL files
+                'aviso' for data received from AVISO
+                'rads' for data received from RADS software
+            ** additional sources can be added in lib_dict_ext.py/product_paths
+                if a new source is added then be sure to make a new directory
+                corresponding to the source name in ~/imssb_software/output/mn_template/product2data/
+--> Run "run_product2data_ext.py" in command line 
+
+
+~~~~ Additional notes ~~~~~
+Commands:
+The aforementioned steps can be carried-out using the following commands within the terminal:
+    1. >> cd /path/to/your/directory/imssb_software/iSSB_functions/
+    2. >> vi run_product2data_ext.py
+        ◦ edit inputs
+    3. >> python run_product2data_ext.py
+
+Example:
+Running run_product2data_ext.py with the inputs:
+    • MISSIONNAME = ‘j2’ [position (1)]
+    • cyc = np.arange(19,20) [positions (5a) & (5b)]
+    • VERSION = 1
+    • ALTINTERP = ‘none’
+    • SOURCE = ‘jpl’ [position (4)]
+will produce by-cycle files in “~/imssb_software/output/MISSIONNAME/product2data/SOURCE/” with the names representing the input:
+    • (1)_(2)_(3)_(4)_(5a)_c_(5b)_na_na.nc
+where, additional information includes;
+    • [position (2)] always set to ‘dir’ to represent along-track data
+    • [position (3)] software step
+The resulting file names in this example are;
+    • j2_dir_product2data_jpl_19_c_19_na_na.nc
+
+

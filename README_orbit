@@ -1,0 +1,22 @@
+February 8, 2021
+----------------
+
+Note: This code includes some components the a JPL proprietary. Please do not redistribute for any purposes beyond support of JPL-supported work.
+
+Sample code to perform orbit interpolation of pos_goa files using times from a netCDF file.
+
+To compile: "make"
+
+Example provided can be executed as follows:
+orbitinterp.e -posgoafile ja2_gpsr_rlse18a_041.pos -ncfile JA2_GPN_2PdP041_001_20090812_162108_20090812_171721.nc
+
+The output then prints:
+netCDF data record number, lat, lon, alt, orbit file lat, lon, alt, differences of lat, lon, alt
+Altitude is in units of meters, lat/lon in degrees.
+
+For example:
+     0    -66.149857     17.025538   1355806.179800    -66.149857     17.025538   1355806.171449      0.000000      0.000000      0.008351
+     1    -66.149790     17.155228   1355806.540200    -66.149790     17.155229   1355806.531852      0.000000      0.000000      0.008348
+     2    -66.149607     17.284918   1355806.872100    -66.149607     17.284918   1355806.863776      0.000000      0.000000      0.008324
+     3    -66.149309     17.414604   1355807.175500    -66.149309     17.414604   1355807.167220     -0.000000      0.000000      0.008280
+

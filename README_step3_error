@@ -1,0 +1,137 @@
+The following instructions are for using the SSB modeling software developed by
+Alexa Putnam Shilleh from the University of Colorado Boulder. 
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Step-3 for error analysis: Execute least squares to find the SSB model with either dependent
+    variable subtitions or added independent variable error.
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+--> Open "run_data2matrices_ext.py" and define:
+
+        MISSIONNAME: input string corresponding to mission name
+            options: 
+                'tx' for Topex/Poseidon
+                'j1' or 'j2' or 'j3' for Jason missions 1-3
+                's6A' for Sentinel-6 Michael Freilich
+                
+        MNtag: define year of data used to create model
+            ** see README_MNtag
+        
+        METHOD: input string corresponding to data method
+            options:
+                'dir': for an alongtrack (DIR or COE) model
+                'xov': for crossover (XOV) model
+                'col': for collinear (COL) model
+                'jnt': for joint (JNT) model
+                'coe': for coestimated (COE) model
+                
+        SOURCE: input string corresponding to altimeter data source
+            options:
+                "jpl" for data received from JPL files
+                "aviso" for data received from AVISO
+                "rads" for data received from RADS software
+            ** additional sources can be added in lib_dict_ext.py/product_paths
+                if a new source is added then be sure to make a new directory
+                corresponding to the source name in ~/imssb_software/output/mn_template/product2data/
+             
+               
+        DIM: input string corresponding to second dimension (the first dimension = SWH)
+            default: DIM = 'u10'
+            options:
+                altimeter wind speed: 'u10'
+                backscatter coefficient: 'sig0'
+            ** more options can be added in lib_geo_gridding_ext.py/grid_dimensions
+                this function allows you to define a new parameter, as well as
+                resize the current parameters.
+                    i.e. dx and x_grid define the bin spacing and nodes for the 
+                    SWH axis, respectively.
+            
+        OMIT: enter string to define a third dimension, or leave as empty bracket
+            default (2D model): OMIT = []
+            options for a 3D model: 
+                mean wave period: 'mean_wave_period_t02'
+            ** more options can be added in lib_geo_gridding_ext.py/grid_dimensions
+                this function allows you to define a new parameter, as well as
+                resize the current parameters.
+                    i.e. dz and z_grid define the bin spacing and nodes for the 
+                    Z axis, respectively.
+            
+        WEIGHT: True or False
+            default: WEIGHT = False
+            options:
+                True: weight measurements based on latitude
+                False: do not weight measurements based on latitude
+                
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ERROR-ANALYSIS-SPECIFIC
+        ERR: define independent-variable error/analysis, or leave as empty bracket
+            options:
+                nominal model, no added error: [] (idential to nominal SSB solution if VAR='usla')
+                tandem analysis: 'j2j3','j1j2', or 'txj1'
+                    e.g. jason-2 and jason-3 tandem analysis = 'j2j3'
+                create mle3 SSB model: 'mle3'
+                add noise for error analysis:'rms_w','rms_s' or 'rms_'ws'
+                    ** _w = added SWH error, _s = added sig0 error
+                smooth SWH measurements more than 1Hz: 'smth_swh'
+                pseuro low resolution mode (plrm) analysis: 'plrm'
+             ** more options can be added in lib_data_ext.py/pull_observables
+             
+                        
+        VAR: define substitution for dependent variable analysis
+            options (dependent variable):
+                'usla': uncorrected SLA (idential to nominal SSB solution if ERR=[])
+                'dISSB_tdm': difference between altimeter ionosphere corrections (tandem analysis)
+                'dSWH_tdm': difference between 1 Hz SWH measurements (tandem analysis)
+                'dWTC_tdm': difference between radiometer wet troposphere corrections (tandem analysis)
+                'dORM_tdm': difference between orbit-range-mss (tandem analysis)
+                'bm3': Gaspar, 1994 BM3 model (for verification purposes)
+                'ib_corr': usla without HF correction
+                'alt_cnes': replace Goddard orbit solution with CNES solution in usla (for TX)
+                'alt_jpl': replace CNES orbit solution with JPL solution in usla (for J2)
+                'wet_tropo_model': replace radiometer WTC correction with model correction in usla
+                'iono_tran': replace GIM ionosphere correction with ALT (i.e. Tran) correction in usla
+                'iono_tran_smooth': replace GIM ionosphere correction with smooted ALT (i.e. Tran) correction in usla
+                'iono_corr_alt': replace GIM ionosphere correction with ALT correction from SSB model in usla
+                'ocean_fes': replace GOT ocean tide correction with FES correction in usla
+                'mss_dtu': replace CNES 2011 MSS correction with DTU correction in usla' (for TX)
+                'mss_cnes15': replace CNES 2011 MSS correction with CNES 2015 correction in usla' (for J1-3)
+            ** more options can be added in lib_filter_ext.py/var2observables
+                
+--> Run "run_matrices2models_ext.py" in command line
+
+~~ Additional notes ~~~~~
+Commands:
+The aforementioned steps can be carried-out using the following commands within the terminal:
+    1. >> cd /path/to/your/directory/imssb_software/iSSB_functions/
+    2. >> vi run_errortables.py
+        ◦ edit inputs
+    3. >> python run_errortables.py
+
+Example:
+A model with the inputs:
+    • MISSIONNAME = ‘j2’ [position (1)]
+    • Mntag = ‘y2’ [positions (6a) & (6b)]
+    • METHOD = ‘dir’ [position (2)]
+    • SOURCE = ‘jpl’ [position (5)]
+    • DIM = ‘u10’ [position (8)]
+    • OMIT = [] [position (9)]
+    • WEIGHT = True [position (10)]
+    • ERR = []
+    • VAR = ‘alt_cnes’ [position (3)]
+will produce both Ku- and C-band models in “~/imssb_software/output/MISSIONNAME/METHOD/matrix2model/” with the file names representing the input:
+    • (1)_(2)_(3)_(4)_(5)_(6a)_c_(6b)_(7)_(8)_(9)_(10).nc
+where, additional information includes; 
+    • [position (4)] software step
+    • [position (7)] frequency band
+The resulting file names in this example are;
+    • j2_dir_alt_cnes_matrix2model_jpl_19_c_55_ku_u10_2d_LatWgt.nc
+    • j2_dir_alt_cnes_matrix2model_jpl_19_c_55_c_u10_2d_LatWgt.nc
+If ERR were equal to anything other than [], then the file names would include an additional piece of information in the form of ‘POE_ERR’.
+    • Here is an example of ERR=’rms_w’:
+        ◦ j2_dir_alt_cnes_matrix2model_jpl_19_c_55_ku_u10_2d_LatWgt_POE_rms_w.nc
+        ◦ j2_dir_alt_cnes_matrix2model_jpl_19_c_55_c_u10_2d_LatWgt_POE_rms_w.nc                
+                
+                
+                
+                
+                
+            
+

@@ -1,0 +1,350 @@
+<?xml version="1.0"?>
+<!--
+Copyright (c) 2011-2023  Remko Scharroo
+See LICENSE.TXT file for copying and redistribution conditions.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as
+published by the Free Software Foundation, either version 3 of the
+License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+** Description **
+Global RADS configuration file
+-->
+
+<!--
+for i in $(seq 174 277)
+do
+    rads2nc -X imssb_rads.xml -S sw -C $i -V time, pass_number, lat, lon, alt, range_ku, range_c, range_ku_mle3, swh_ku, swh_c, swh_ku_mle3, swh_rms_ku, swh_rms_c, swh_rms_ku_mle3, sig0_ku, sig0_c, sig0_ku_mle3, sig0_rms_ku, sig0_rms_c, sig0_rms_ku_mle3, range_numval_ku, range_numval_c, range_numval_ku_mle3, range_rms_ku, range_rms_c, range_rms_ku_mle3, rad_wet_tropo_corr, model_wet_tropo_corr, model_wet_tropo_corr, model_dry_tropo_corr, iono_corr_alt_ku, iono_corr_alt_ku_mle3, off_nadir_angle2_wf_rms_ku, pole_tide, ocean_tide_non_eq, internal_tide_hret, dac, inv_bar, sea_state_bias_ku, sea_state_bias_c, sea_state_bias_mle3, iono_corr_gim_ku, ocean_tide_fes, ocean_tide_got, load_tide_fes, load_tide_got, solid_earth_tide, mean_sea_surface, ssha, ssha_mle3 -o /home/aputnam/IMSSB/imssb_software/output/sw/product2data/rads/sw_dir_product2data_rads_"$i"_c_"$i"_na_na.nc -v
+done
+-->
+
+<!--rads: time, lat, lon, alt, range_ku, range_c, range_ku_mle3,
+wind_speed_alt, wind_speed_rad, off_nadir_angle_wf_ku -->
+<!--alt = gdrf for SWOT-->
+<!--Not available: -->
+
+
+
+<!--SV position-->
+<var name="pass_number" field="9906">
+	<long_name>pass number</long_name>
+	<data>:pass_number</data>
+	<format>f5.0</format>
+	<compress>int2</compress>
+</var>
+
+
+<!--SWH-->
+<var name="swh_ku" field="1701">
+    <long_name>Ku-band significant wave height</long_name>
+    <standard_name>sea_surface_wave_significant_height</standard_name>
+    <units>m</units>
+    <limits>0 20</limits>
+    <data>swh_ku</data>
+    <format>f6.3</format>
+    <compress>int2 1e-3</compress>
+</var>
+
+<var name="swh_c" field="1702" sat="2a 3a 3b 6a j1 j2 j3 tx sw">
+    <long_name>C-band significant wave height</long_name>
+    <standard_name>sea_surface_wave_significant_height</standard_name>
+    <units>m</units>
+    <limits>0 20</limits>
+    <data>swh_c</data>
+    <format>f6.3</format>
+    <compress>int2 1e-3</compress>
+</var>
+
+<var name="swh_ku_mle3" field="1711" sat="6a j2 j3 sw">
+	<long_name>Ku-band significant wave height (MLE3)</long_name>
+	<standard_name>sea_surface_wave_significant_height</standard_name>
+	<units>m</units>
+	<limits>0 20</limits>
+	<data>swh_ku_mle3</data>
+	<format>f6.3</format>
+	<compress>int2 1e-3</compress>
+</var>
+
+<var name="swh_rms_ku" field="2802">
+    <long_name>std dev of Ku-band significant wave height</long_name>
+    <units>m</units>
+    <limits>0.0 2.0</limits>
+    <data>swh_rms_ku</data>
+    <format>f5.3</format>
+    <default>0</default>
+    <compress>int2 1e-3</compress>
+    <comment>Based on valid high-rate measurements</comment>
+</var>
+
+<var name="swh_rms_c" field="2804" sat="2a 3a 3b 6a j1 j2 j3 tx sw">
+	<long_name>std dev of C-band significant wave height</long_name>
+	<units>m</units>
+	<limits>0.0 3.0</limits>
+	<data>swh_rms_c</data>
+	<format>f5.3</format>
+	<compress>int2 1e-3</compress>
+	<comment>Based on valid high-rate measurements</comment>
+</var>
+
+<var name="swh_rms_ku_mle3" field="2812" sat="6a j2 j3 sw">
+	<long_name>std dev of Ku-band significant wave height (MLE3)</long_name>
+	<units>m</units>
+	<limits>0.0 2.0</limits> <!--Might need to be changed-->
+	<data>swh_rms_ku_mle3</data>
+	<format>f5.3</format>
+	<default>0</default>
+	<compress>int2 1e-3</compress>
+	<comment>Based on valid high-rate measurements</comment>
+</var>
+
+<!--Sig0-->
+<var name="sig0_ku" field="1801">
+    <long_name>Ku-band backscatter coefficient</long_name>
+    <standard_name>surface_backwards_scattering_coefficient_of_radar_wave</standard_name>
+    <units>dB</units>
+    <limits>0 40</limits>
+    <data>sig0_ku</data>
+    <format>f6.2</format>
+    <compress>int2 1e-2</compress>
+</var>
+
+<var name="sig0_c" field="1802" sat="2a 3a 3b 6a j1 j2 j3 tx sw">
+	<long_name>C-band backscatter coefficient</long_name>
+	<standard_name>surface_backwards_scattering_coefficient_of_radar_wave</standard_name>
+	<units>dB</units>
+	<limits>0 40</limits>
+	<data>sig0_c</data>
+	<format>f6.2</format>
+	<compress>int2 1e-2</compress>
+</var>
+
+<var name="sig0_ku_mle3" field="1811" sat="6a j2 j3 sw">
+	<long_name>Ku-band backscatter coefficient (MLE3)</long_name>
+	<standard_name>surface_backwards_scattering_coefficient_of_radar_wave</standard_name>
+	<units>dB</units>
+	<limits>0 40</limits>
+	<data>sig0_ku_mle3</data>
+	<format>f6.2</format>
+	<compress>int2 1e-2</compress>
+</var>
+
+<var name="sig0_rms_ku" field="2902">
+    <long_name>std dev of Ku-band backscatter coefficient</long_name>
+    <units>dB</units>
+    <limits>0.0 1.5</limits>
+    <data>sig0_rms_ku</data>
+    <format>f5.3</format>
+    <compress>int2 1e-3</compress>
+    <default>0</default>
+    <comment>Based on valid high-rate measurements</comment>
+</var>
+
+<var name="sig0_rms_c" field="2904" sat="2a 3a 3b 6a j1 j2 j3 tx sw">
+	<long_name>std dev of C-band backscatter coefficient</long_name>
+	<units>dB</units>
+	<data>sig0_rms_c</data>
+	<format>f5.3</format>
+	<compress>int2 1e-3</compress>
+	<comment>Based on valid high-rate measurements</comment>
+</var>
+
+<var name="sig0_rms_ku_mle3" field="2912" sat="6a j2 j3 sw">
+	<long_name>std dev of Ku-band backscatter coefficient (MLE3)</long_name>
+	<units>dB</units>
+	<limits>0.0 1.5</limits>
+	<data>sig0_rms_ku_mle3</data>
+	<format>f5.3</format>
+	<compress>int2 1e-3</compress>
+	<default>0</default>
+	<comment>Based on valid high-rate measurements</comment>
+</var>
+
+<!--Range-->
+<var name="range_numval_ku" field="2101">
+    <long_name>number of valid Ku-band measurements</long_name>
+    <standard_name>altimeter_range number_of_observations</standard_name>
+    <units>1</units>
+    <limits>10.0 21.5</limits>
+    <data>range_numval_ku</data>
+    <default>20</default>
+    <format>f3.0</format>
+    <compress>int1</compress>
+</var>
+
+<var name="range_numval_c" field="2102" sat="2a 3a 3b 6a j1 j2 j3 sw">
+	<long_name>number of valid C-band measurements</long_name>
+	<standard_name>altimeter_range number_of_observations</standard_name>
+	<units>1</units>
+	<limits>10.0 21.5</limits>
+	<data>range_numval_c</data>
+	<format>f3.0</format>
+	<compress>int1</compress>
+</var>
+
+<var name="range_numval_ku_mle3" field="2111" sat="6a j2 j3 sw">
+	<long_name>number of valid Ku-band measurements (MLE3)</long_name>
+	<standard_name>altimeter_range number_of_observations</standard_name>
+	<units>1</units>
+	<limits>10.0 21.5</limits>
+	<data>range_numval_ku_mle3</data>
+	<format>f3.0</format>
+	<compress>int1</compress>
+</var>
+
+<var name="range_rms_ku" field="2002">
+    <long_name>std dev of Ku-band range</long_name>
+    <units>m</units>
+    <limits>0.00 0.25</limits>
+    <data>range_rms_ku</data>
+    <format>f6.4</format>
+    <default>0</default>
+    <compress>int2 1e-4</compress>
+    <comment>Based on valid high-rate measurements</comment>
+</var>
+
+<var name="range_rms_c" field="2004" sat="2a 3a 3b 6a j1 j2 j3 sw">
+	<long_name>std dev of C-band range</long_name>
+	<units>m</units>
+	<limits>0.0 0.5</limits>
+	<data>range_rms_c</data>
+	<format>f6.4</format>
+	<compress>int2 1e-4</compress>
+	<comment>Based on valid high-rate measurements</comment>
+</var>
+
+<var name="range_rms_ku_mle3" field="2012" sat="6a j2 j3 sw">
+	<long_name>std dev of Ku-band range (MLE3)</long_name>
+	<units>m</units>
+	<limits>0.00 0.25</limits> <!--May need adjustment-->
+	<data>range_rms_ku_mle3</data>
+	<format>f6.4</format>
+	<default>0</default>
+	<compress>int2 1e-4</compress>
+	<comment>Based on valid high-rate measurements</comment>
+</var>
+
+<!--Saral/AltiKa-->
+<var name="swh_ka" field="1701">
+    <long_name>Ka-band significant wave height</long_name>
+    <standard_name>sea_surface_wave_significant_height</standard_name>
+    <units>m</units>
+    <limits>0 20</limits>
+    <data>swh_ka</data>
+    <format>f6.3</format>
+    <compress>int2 1e-3</compress>
+</var>
+
+<var name="sig0_ka" field="1801">
+    <long_name>Ka-band backscatter coefficient</long_name>
+    <standard_name>surface_backwards_scattering_coefficient_of_radar_wave</standard_name>
+    <units>dB</units>
+    <limits>0 40</limits>
+    <data>sig0_ka</data>
+    <format>f6.3</format>
+    <compress>int2 1e-3</compress>
+</var>
+
+<var name="range_rms_ka" field="2002">
+    <long_name>std dev of Ka-band range</long_name>
+    <units>m</units>
+    <limits>0.0 0.25</limits>
+    <data>range_rms_ka</data>
+    <format>f6.4</format>
+    <default>0</default>
+    <compress>int2 1e-4</compress>
+    <comment>Based on valid high-rate measurements</comment>
+</var>
+
+<var name="swh_rms_ka" field="2802">
+    <long_name>std dev of Ka-band significant wave height</long_name>
+    <units>m</units>
+    <limits>0.0 2.5</limits>
+    <data>swh_rms_ka</data>
+    <format>f5.3</format>
+    <default>0</default>
+    <compress>int2 1e-3</compress>
+    <comment>Based on valid high-rate measurements</comment>
+</var>
+
+<var name="sig0_rms_ka" field="2902">
+    <long_name>std dev of Ka-band backscatter coefficient</long_name>
+    <units>dB</units>
+    <limits>0.0 1.5</limits>
+    <data>sig0_rms_ka</data>
+    <format>f5.3</format>
+    <compress>int2 1e-3</compress>
+    <default>0</default>
+    <comment>Based on valid high-rate measurements</comment>
+</var>
+
+
+<!--Aliasing-->
+<alias name="rad_wet_tropo_corr" field="8" sat="!c2 g1 gs">wet_tropo_rad</alias>
+<alias name="model_wet_tropo_corr" field="8">wet_tropo_ecmwf</alias>
+<alias name="model_dry_tropo_corr" field="7" sat="!g1 gs tx pn">dry_tropo_ecmwf</alias>
+<alias name="model_dry_tropo_corr" field="7" sat="g1 gs tx pn">dry_tropo_era</alias>
+<alias name="iono_corr_alt_ku" field="9" sat="2a 3a 3b 6a j1 j2 j3 n1 tx sw">iono_alt_smooth</alias>
+<alias name="iono_corr_alt_ku_mle3" field="9" sat="2a 3a 3b 6a j1 j2 j3 n1 tx sw">iono_alt_smooth_mle3 iono_alt_smooth </alias>
+<alias name="pole_tide" field="1401 14"> tide_pole </alias>
+<alias name="ocean_tide_non_eq" field="3902"> tide_non_equil </alias>
+<alias name="internal_tide_hret"> tide_internal </alias>
+<alias name="sea_state_bias_ku" field="15" sat="2a 3a 3b 6a c2 j1 j2 j3 n1 tx sw">ssb_cls</alias>
+<alias name="sea_state_bias_c" field="15" sat="2a 3a 3b 6a c2 j1 j2 j3 n1 tx sw">ssb_cls_c</alias>
+<alias name="sea_state_bias_mle3" field="15" sat="2a 3a 3b 6a c2 j1 j2 j3 n1 tx sw">ssb_cls_mle3</alias>
+<alias name="iono_corr_gim_ku" field="9" sat="2a 3a 3b 6a j1 j2 j3 n1 tx sw">iono_gim</alias>
+<alias name="ocean_tide_fes" field="12">tide_ocean_fes14</alias>
+<alias name="ocean_tide_got" field="12">tide_ocean_got410</alias>
+<alias name="load_tide_fes" field="13">tide_load_fes14</alias>
+<alias name="load_tide_got" field="13">tide_load_got410</alias>
+<alias name="solid_earth_tide" field="11">tide_solid</alias>
+<alias name="inv_bar">inv_bar_mog2d_era inv_bar_mog2d inv_bar_mok2d</alias>
+<alias name="dac" field="10">inv_bar_mog2d_era inv_bar_mog2d inv_bar_mok2d</alias>
+<alias name="mean_dynamic_topography">adt</alias>
+<alias name="mean_sea_surface" field="16">mss_dtu21</alias>
+<alias name="mean_sea_surface_cnes15" field="16">mss_cnescls15</alias>
+<alias name="rad_distance_to_land" field="45">dist_coast</alias>
+
+
+<var name="ssha" field="0">
+	<long_name>sea surface height anomaly</long_name>
+	<standard_name>sea_surface_height_above_sea_level</standard_name>
+	<units>m</units>
+	<format>f8.4</format>
+	<compress>int2 1e-4</compress>
+	<data>alt range_ku SUB model_dry_tropo_corr SUB rad_wet_tropo_corr SUB iono_corr_alt_ku SUB dac SUB solid_earth_tide SUB ocean_tide_fes SUB load_tide_fes SUB
+		pole_tide SUB sea_state_bias_ku SUB mean_sea_surface SUB</data>
+	<quality_flag>swh_ku sig0_ku swh_rms_ku sig0_rms_ku range_rms_ku range_numval_ku flags</quality_flag>
+	<comment>Sea level determined from satellite altitude - range - all altimetric corrections</comment>
+</var>
+
+<var name="ssha_mle3" sat="6a j2 j3 sw tx">
+	<long_name>sea surface height (MLE3)</long_name>
+	<standard_name>sea_surface_height_above_sea_level</standard_name>
+	<units>m</units>
+	<format>f8.4</format>
+	<compress>int2 1e-4</compress>
+	<data>alt range_ku_mle3 SUB model_dry_tropo_corr SUB rad_wet_tropo_corr SUB iono_corr_alt_ku_mle3 SUB dac SUB solid_earth_tide SUB ocean_tide_fes SUB
+		load_tide_fes SUB pole_tide SUB sea_state_bias_mle3 SUB mean_sea_surface SUB</data>
+	<quality_flag>swh_ku_mle3 sig0_ku_mle3 range_rms_ku_mle3 range_numval_ku_mle3 flags_mle3 swh_rms_ku_mle3 sig0_rms_ku_mle3</quality_flag>
+	<comment>Sea level determined from satellite altitude - MLE3 range - all (MLE3) altimetric corrections</comment>
+</var>
+
+
+<var name="ssha_ka" field="0">
+        <long_name>sea surface height anomaly ka</long_name>
+        <standard_name>sea_surface_height_above_sea_level_ka</standard_name>
+        <units>m</units>
+        <format>f8.4</format>
+        <compress>int2 1e-4</compress>
+        <data>alt range_ka SUB model_dry_tropo_corr SUB rad_wet_tropo_corr SUB iono_gim SUB dac SUB solid_earth_tide SUB ocean_tide_fes SUB load_tide_fes SUB
+                pole_tide SUB ssb_tran2019 SUB mean_sea_surface SUB</data>
+        <quality_flag>swh_ka sig0_ka swh_rms_ka sig0_rms_ka range_rms_ka range_numval_ka flags</quality_flag>
+        <comment>Sea level determined from satellite altitude - range - all altimetric corrections</comment>
+</var>
+
